@@ -5,6 +5,9 @@ from flask_restful import reqparse
 app = Flask(__name__)
 api = Api(app)
 
+id_list = ["qlalf9824@naver.com", "gayoung5401@gmail.com", "asdfeg@viewmagine.com"]
+id = "qlalf9824@viewmagine.com"
+pw = "1q2w3e"
 
 class Login(Resource):
     def get(self):
@@ -12,8 +15,6 @@ class Login(Resource):
         param_dict = request.args.to_dict()
 
         id = param_dict['id']
-        
-        id_list = ["qlalf9824@naver.com", "gayoung5401@gmail.com", "asdfeg@viewmagine.com"]
 
         if(id in id_list):
             return {
