@@ -47,7 +47,7 @@ class Login(Resource):
             
             pattern = "^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
 
-            if bool(re.match(pattern, reid)) == False:
+            if re.match(pattern, reid)== None:
                 return {
                     'Response' : {
                         'message' : 'Wrong email'
