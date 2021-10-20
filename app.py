@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask_restful import Api, Resource
 from flask_restful import reqparse
+import re
 
 app = Flask(__name__)
 api = Api(app)
@@ -11,21 +12,65 @@ pw = "1q2w3e"
 
 class Login(Resource):
     def get(self):
-        
-        param_dict = request.args.to_dict()
+        try:
+            param_dict = request.args.to_dict()
 
-        id = param_dict['id']
+            reid = param_dict['id']
 
-        if(id in id_list):
+            if(reid in id_list):
+                return {
+                    'Response' : {
+                        'message' : 'This is a duplicate ID.'
+                    }
+                }
+            else:
+                return {
+                    'Response' : {
+                        'message' : 'This is the ID that you can use.'
+                    }
+                }
+        except Exception as e:
             return {
                 'Response' : {
-                    'message' : 'This is a duplicate ID.'
+                    'Message' : 'Error in Processing',
+                    'Result': 'Error',
+                    'Details': str(e)
                 }
             }
-        else:
+
+    def post(self):
+        try:
+            params = request.get_json(force=True)
+
+            reid = params['id']
+            repw = params['pw']
+            
+            pattern = "^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+
+            if bool(re.match(pattern, reid)) == False:
+                return {
+                    'Response' : {
+                        'message' : 'Wrong email'
+                    }
+                }
+            elif(reid == id and repw == pw):
+                return {
+                    'Response' : {
+                        'message' : 'Login!'
+                    }
+                }
+            else:
+                return {
+                    'Response' : {
+                        'message' : 'Wrong ID or Password'
+                    }
+                }
+        except Exception as e:
             return {
                 'Response' : {
-                    'message' : 'This is the ID that you can use.'
+                    'Message' : 'Error in Processing',
+                    'Result': 'Error',
+                    'Details': str(e)
                 }
             }
 
